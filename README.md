@@ -17,7 +17,7 @@ This Python script allows you to interact with OpenAI's `gpt-3.5-turbo` model by
 
 ```bash
 git clone https://github.com/BurningStar0100/first-openai-api-call
-
+```
 ---
 
 ### ✅ 2. Create and activate a virtual environment (optional but recommended)
@@ -25,7 +25,7 @@ git clone https://github.com/BurningStar0100/first-openai-api-call
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-
+```
 ---
 
 ### ✅ 3. Install Python & Dependencies
@@ -34,7 +34,7 @@ Ensure you have **Python 3.7+** installed. Then, install the required library:
 
 ```bash
 pip install openai python-dotenv
-
+```
 ---
 
 ### ✅ 4. Create a `.env` File
