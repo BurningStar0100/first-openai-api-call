@@ -2,34 +2,73 @@ import openai
 import os
 from dotenv import load_dotenv
 
-# Load variables from .env file
-load_dotenv()
+def make_openai_api_call():
+    """
+    Makes an OpenAI API call using gpt-3.5-turbo model and displays response with token usage
+    """
+    
+    # Load environment variables from .env file
+    load_dotenv()
+    
+    # Set up OpenAI API key
+    openai.api_key = os.getenv('OPENAI_API_KEY')
+    
+    # Check if API key is loaded
+    if not openai.api_key:
+        print("Error: OPENAI_API_KEY not found in environment variables.")
+        print("Please make sure you have a .env file with OPENAI_API_KEY=your_api_key")
+        return
+    
+    # Fixed system prompt
+    system_prompt = "You are a helpful assistant that provides clear, accurate, and concise responses."
+    
+    # Get user input
+    print("=== OpenAI GPT-3.5-Turbo API Call ===")
+    user_input = input("Enter your question/prompt: ")
+    
+    if not user_input.strip():
+        print("Error: Please provide a valid input.")
+        return
+    
+    try:
+        # Make API call to OpenAI
+        print("\nMaking API call...")
+        
+        response = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_input}
+            ],
+            temperature=0.7,
+            max_tokens=1000
+        )
+        
+        # Extract response and token usage
+        assistant_response = response.choices[0].message.content
+        token_usage = response.usage
+        
+        # Display results
+        print("\n" + "="*50)
+        print("ASSISTANT RESPONSE:")
+        print("="*50)
+        print(assistant_response)
+        
+        print("\n" + "="*50)
+        print("TOKEN USAGE:")
+        print("="*50)
+        print(f"Prompt tokens: {token_usage.prompt_tokens}")
+        print(f"Completion tokens: {token_usage.completion_tokens}")
+        print(f"Total tokens: {token_usage.total_tokens}")
+        
+    except openai.AuthenticationError:
+        print("Error: Invalid API key. Please check your OPENAI_API_KEY in the .env file.")
+    except openai.RateLimitError:
+        print("Error: Rate limit exceeded. Please try again later.")
+    except openai.APIError as e:
+        print(f"Error: OpenAI API error occurred: {e}")
+    except Exception as e:
+        print(f"Error: An unexpected error occurred: {e}")
 
-# Fetch the API key from environment
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
-# Define a fixed system prompt
-system_prompt = "You are a helpful assistant that answers clearly and concisely."
-
-# Get user input from the console
-user_input = input("User: ")
-
-# Create the chat message list
-messages = [
-    {"role": "system", "content": system_prompt},
-    {"role": "user", "content": user_input}
-]
-
-# Call the Chat API
-response = openai.chat.completions.create(
-    model="gpt-3.5-turbo",
-    messages=messages
-)
-
-# Extract assistant's reply
-assistant_reply = response['choices'][0]['message']['content']
-total_tokens = response['usage']['total_tokens']
-
-# Display the response and token usage
-print("\nAssistant:", assistant_reply)
-print("Total tokens used:", total_tokens)
+if __name__ == "__main__":
+    make_openai_api_call()
