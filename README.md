@@ -8,6 +8,7 @@ This Python script allows you to interact with OpenAI's `gpt-3.5-turbo` model by
 - Receives a response from the assistant
 - Displays the assistant’s reply and the total number of tokens used
 - Keeps your API key secure using a `.env` file
+- Supports error handling
 
 ---
 
